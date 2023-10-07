@@ -1,3 +1,6 @@
 buildProject.sh
 pushDist.bat
 backup/*
+
+main.exe
+*.exe
