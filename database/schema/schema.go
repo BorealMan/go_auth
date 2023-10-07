@@ -1,0 +1,25 @@
+package schema
+
+var User_Schema = `
+    CREATE TABLE IF NOT EXISTS user (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        email VARCHAR(64) NOT NULL,
+        password VARCHAR(64) NOT NULL,
+        role_id INT NOT NULL,
+        phone VARCHAR(13) DEFAULT NULL,
+        account_enabled BOOLEAN NOT NULL DEFAULT 1,
+        created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (role_id) REFERENCES user_role(id) 
+    );
+`
+
+var User_Role = `
+    CREATE TABLE IF NOT EXISTS user_role (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        role VARCHAR(32) UNIQUE NOT NULL,
+        description VARCHAR(128) DEFAULT NULL,
+        created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+`
