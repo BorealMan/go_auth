@@ -10,5 +10,5 @@ var (
 	DB_PASSWORD = "123"
 	DB_HOST     = "localhost"
 	DB_DATABASE = "test"
-	DB_PORT     = "3306"
+	DB_PORT     = "34017"
 )
