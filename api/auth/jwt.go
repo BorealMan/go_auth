@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -86,14 +85,14 @@ func ValidateAdmin(c *fiber.Ctx) error {
 func TokenExpired(claims jwt.MapClaims) error {
 	tokenExp, err := strconv.ParseFloat(fmt.Sprintf("%f", claims["exp"]), 64)
 	if err != nil {
-		return err
+		return fmt.Errorf("Invalid Token")
 	}
 	now := time.Now().Add(time.Minute * 3600).Unix()
 	diff := now - int64(tokenExp)
 	b := diff > Expires
 	// Token Is Expired
 	if b {
-		return errors.New("Token Is Expired")
+		return fmt.Errorf("Token Is Expired")
 	}
 	return nil
 }

@@ -18,7 +18,7 @@ func SeedUserRoles() {
 	// Ignore Err On Duplicate
 	_, err := DB.Exec(`INSERT INTO user_role (role, description) VALUES 
 				('default', 'Assigned by default.'),
-				('admin', 'Role has special privlidges.')
+				('admin', 'Possess special privlidges.')
 	`)
 	if err != nil {
 		fmt.Printf("Seed User Role: %v\n", err)
