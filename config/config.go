@@ -8,7 +8,7 @@ var (
 	// DB Settings
 	DB_USERNAME = "test"
 	DB_PASSWORD = "123"
-	DB_HOST     = "172.24.0.3"
+	DB_HOST     = "db"
 	DB_DATABASE = "test"
 	DB_PORT     = "34017"
 )
