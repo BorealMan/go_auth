@@ -6,9 +6,9 @@ var (
 	JWT_SECRET = `Enter Your Secret`
 	MODE       = "DEV"
 	// DB Settings
-	DB_USERNAME = ""
-	DB_PASSWORD = ""
-	DB_HOST     = ""
-	DB_DATABASE = ""
+	DB_USERNAME = "test"
+	DB_PASSWORD = "123"
+	DB_HOST     = "localhost"
+	DB_DATABASE = "test"
 	DB_PORT     = "3306"
 )
