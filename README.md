@@ -21,10 +21,20 @@ go run main.go
 
 ### Optionally Run With Docker Compose
 
-```
-    docker build --no-cache -t go-user-api .
-```
+#### Build the go-user-api image
 
 ```
-    docker compose up
+docker build --no-cache -t go-user-api .
+```
+
+#### Start service
+
+```
+docker compose up
+```
+
+#### Stop service
+
+```
+docker compose down
 ```
