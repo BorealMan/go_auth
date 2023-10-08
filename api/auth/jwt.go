@@ -1,7 +1,9 @@
 package auth
 
 import (
+	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -12,6 +14,7 @@ import (
 )
 
 var JWTSecretKey = []byte(config.JWT_SECRET)
+var Expires = int64(84600) // One Day
 
 func IssueJWT(userId int, userRole string) (string, error) {
 
@@ -50,8 +53,13 @@ func ValidateJWT(c *fiber.Ctx) error {
 
 	if token.Valid {
 		claims, ok := token.Claims.(jwt.MapClaims)
-		// fmt.Printf("Claims:\nRole:%s\nUserId:%s\n", claims["role"], claims["userId"])
+		// fmt.Printf("Claims:\nRole:%s\nUserId:%s\nExp: %f\n", claims["role"], claims["userId"], claims["exp"])
 		if ok {
+			// Check Expiration
+			err = TokenExpired(claims)
+			if err != nil {
+				return c.Status(403).JSON(fiber.Map{"error": err})
+			}
 			c.Request().Header.Set("Role", fmt.Sprintf("%s", claims["role"]))
 			c.Request().Header.Set("Userid", fmt.Sprintf("%s", claims["userId"]))
 			// Add To Locals -- Plan To Convert All Methods To Use Locals Instead of Request Header
@@ -73,4 +81,19 @@ func ValidateAdmin(c *fiber.Ctx) error {
 		return c.SendStatus(403)
 	}
 	return c.Next()
+}
+
+func TokenExpired(claims jwt.MapClaims) error {
+	tokenExp, err := strconv.ParseFloat(fmt.Sprintf("%f", claims["exp"]), 64)
+	if err != nil {
+		return err
+	}
+	now := time.Now().Add(time.Minute * 3600).Unix()
+	diff := now - int64(tokenExp)
+	b := diff > Expires
+	// Token Is Expired
+	if b {
+		return errors.New("Token Is Expired")
+	}
+	return nil
 }
