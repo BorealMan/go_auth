@@ -11,13 +11,21 @@ A user authentication api written with fiber and sqlx. A good base to build off 
 
 ### To Use:
 
-#### Add database settings to config
+You must have a mysql or mariadb database to use this service.
+
+Add your database settings to config
+
+#### Running Service
 
 ```
 go run main.go
 ```
 
-##### It's that easy!
+#### Create an executable
+
+```
+go build main.go
+```
 
 ### Optionally Run With Docker Compose
 
