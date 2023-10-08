@@ -18,3 +18,13 @@ go run main.go
 ```
 
 ##### It's that easy!
+
+### Optionally Run With Docker Compose
+
+```
+    docker build --no-cache -t go-user-api .
+```
+
+```
+    docker compose up
+```
