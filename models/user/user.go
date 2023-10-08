@@ -211,7 +211,7 @@ func GetUser(c *fiber.Ctx) error {
 		if DEBUG {
 			log.Println("Get User: Unable To Find User")
 		}
-		c.Status(400).JSON(fiber.Map{"error": "Unable To Find User"})
+		return c.Status(400).JSON(fiber.Map{"error": "Unable To Find User"})
 	}
 	role := new(User_Role)
 	err = database.DB.Get(role, `SELECT * FROM user_role WHERE id = ?`, user.RoleID)
@@ -219,7 +219,7 @@ func GetUser(c *fiber.Ctx) error {
 		if DEBUG {
 			log.Println("Get User: Unable To Find Role")
 		}
-		c.Status(500).JSON(fiber.Map{"error": "Unknown Error"})
+		return c.Status(500).JSON(fiber.Map{"error": "Unknown Error"})
 	}
 	user.Role = *role
 	user.Password = ""
