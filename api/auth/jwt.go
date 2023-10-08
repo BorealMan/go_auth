@@ -13,7 +13,6 @@ import (
 )
 
 var JWTSecretKey = []byte(config.JWT_SECRET)
-var Expires = int64(84600) // One Day
 
 func IssueJWT(userId int, userRole string) (string, error) {
 
@@ -89,7 +88,7 @@ func TokenExpired(claims jwt.MapClaims) error {
 	}
 	now := time.Now().Add(time.Minute * 3600).Unix()
 	diff := now - int64(tokenExp)
-	b := diff > Expires
+	b := diff > config.JWT_EXPIRES
 	// Token Is Expired
 	if b {
 		return fmt.Errorf("Token Is Expired")

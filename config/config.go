@@ -2,9 +2,11 @@ package config
 
 var (
 	// API Settings
-	APP_PORT   = 5000
-	JWT_SECRET = `Enter Your Secret`
-	MODE       = "DEV"
+	APP_PORT = 5000
+	MODE     = "DEV"
+	// Auth
+	JWT_SECRET  = `Enter Your Secret`
+	JWT_EXPIRES = int64(84600) // One Day
 	// DB Settings
 	DB_USERNAME = "test"
 	DB_PASSWORD = "123"
