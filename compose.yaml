@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+    go-user-api:
+        image: "go-user-api"
+        ports:
+            - "8000:5000" 
+        expose:
+            - "5000"
+        depends_on:
+            db:
+                condition: service_started
+        restart: on-failure
+    db:
+        image: mysql:latest
+        environment:
+            MYSQL_USER: "test"
+            MYSQL_PASSWORD: "123"
+            MYSQL_DATABASE: "test"
+            MYSQL_ROOT_PASSWORD: "123"
+        ports:
+            - "34017:3306"
+        expose:
+            - "3306"
+        restart: on-failure
+
