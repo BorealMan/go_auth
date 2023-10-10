@@ -25,7 +25,7 @@ type User struct {
 	RoleID          uint           `db:"role_id" json:"role_id" validate:"omitempty,number"`
 	Role            User_Role      `json:"user_role" validate:"omitempty"`
 	Phone           sql.NullString `db:"phone" json:"phone" validate:"omitempty,e164"`
-	Account_enabled *bool          `db:"account_enabled" json:"account_enabled" validate:"omitempty"`
+	Account_Enabled *bool          `db:"account_enabled" json:"account_enabled" validate:"omitempty"`
 	Created         time.Time      `db:"created" json:"created"`
 	Updated_at      time.Time      `db:"updated_at" json:"updated_at"`
 }
@@ -82,14 +82,22 @@ func Login(c *fiber.Ctx) error {
 	err = database.DB.Get(user, `SELECT * from user WHERE email = ?`, r.Email)
 
 	if err != nil {
-		log.Printf(`Login Error: %v`, err)
+		if DEBUG {
+			log.Printf(`Login Error: %v`, err)
+		}
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid Username or Password"})
+	}
+
+	// Verify User Account is Enabled If Found
+	if !*user.Account_Enabled {
+		return c.Status(403).JSON(fiber.Map{"error": "User Account Is Disabled"})
 	}
 
 	// Check Password
 	pld := r.Email + r.Password
 	if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pld)) != nil {
 		log.Println("Login Bcrypt Error")
-		return c.Status(500).JSON(fiber.Map{"error": "Invalid Password"})
+		return c.Status(500).JSON(fiber.Map{"error": "Invalid Username or Password"})
 	}
 
 	// Get Role
@@ -235,7 +243,15 @@ func DeleteUser(c *fiber.Ctx) error {
 }
 
 func GetUserRoles(c *fiber.Ctx) error {
-	return nil
+	var userRoles []User_Role
+	err := database.DB.Select(userRoles, `SELECT * FROM user_role`)
+	if err != nil {
+		if DEBUG {
+			log.Printf("Get User Roles: %v", err)
+		}
+		return c.Status(500).JSON(fiber.Map{"error": "Unable To Fetch User Roles"})
+	}
+	return c.Status(200).JSON(fiber.Map{"user_roles": userRoles})
 }
 
 func Validate(r interface{}) error {
